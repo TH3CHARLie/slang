@@ -3275,6 +3275,9 @@ SLANG_API SlangReflectionModifier* spReflectionVariable_FindModifier(
     case SLANG_MODIFIER_INOUT:
         modifier = var->findModifier<InOutModifier>();
         break;
+    case SLANG_MODIFIER_TUNABLE:
+        modifier = var->findModifier<TunableAttribute>();
+        break;
     default:
         return nullptr;
     }

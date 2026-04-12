@@ -2232,7 +2232,8 @@ public:                                                              \
         SLANG_MODIFIER_MUTATING,
         SLANG_MODIFIER_IN,
         SLANG_MODIFIER_OUT,
-        SLANG_MODIFIER_INOUT
+        SLANG_MODIFIER_INOUT,
+        SLANG_MODIFIER_TUNABLE
     };
 
     typedef SlangUInt32 SlangImageFormatIntegral;
@@ -3013,7 +3014,8 @@ struct Modifier
         Mutating = SLANG_MODIFIER_MUTATING,
         In = SLANG_MODIFIER_IN,
         Out = SLANG_MODIFIER_OUT,
-        InOut = SLANG_MODIFIER_INOUT
+        InOut = SLANG_MODIFIER_INOUT,
+        Tunable = SLANG_MODIFIER_TUNABLE
     };
 };
 

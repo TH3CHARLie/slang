@@ -1995,6 +1995,12 @@ class NonCopyableTypeAttribute : public Attribute
 };
 
 FIDDLE()
+class TunableAttribute : public Attribute
+{
+    FIDDLE(...)
+};
+
+FIDDLE()
 class NoSideEffectAttribute : public Attribute
 {
     FIDDLE(...)
