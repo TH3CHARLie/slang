@@ -154,13 +154,18 @@ static bool isScalarType(Type* type)
 
 // user attribute
 
+static bool isUserVisibleAttribute(Attribute* attr)
+{
+    return as<UserDefinedAttribute>(attr) || as<TunableAttribute>(attr);
+}
+
 static unsigned int getUserAttributeCount(Decl* decl)
 {
     unsigned int count = 0;
-    for (auto x : decl->getModifiersOfType<UserDefinedAttribute>())
+    for (auto x : decl->getModifiersOfType<Attribute>())
     {
-        SLANG_UNUSED(x);
-        count++;
+        if (isUserVisibleAttribute(x))
+            count++;
     }
     return count;
 }
@@ -184,8 +189,10 @@ static SlangReflectionUserAttribute* findUserAttributeByName(
 static SlangReflectionUserAttribute* getUserAttributeByIndex(Decl* decl, unsigned int index)
 {
     unsigned int id = 0;
-    for (auto x : decl->getModifiersOfType<UserDefinedAttribute>())
+    for (auto x : decl->getModifiersOfType<Attribute>())
     {
+        if (!isUserVisibleAttribute(x))
+            continue;
         if (id == index)
             return convert(x);
         id++;

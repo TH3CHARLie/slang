@@ -1212,6 +1212,17 @@ Modifier* SemanticsVisitor::validateAttribute(
         }
         return attr;
     }
+    else if (auto tunableAttr = as<TunableAttribute>(attr))
+    {
+        // If args provided (integer tunable), validate each as compile-time constant
+        for (Index i = 0; i < attr->args.getCount(); i++)
+        {
+            auto constInt = checkConstantIntVal(attr->args[i]);
+            if (!constInt)
+                return nullptr;
+            tunableAttr->intArgVals.add(constInt);
+        }
+    }
     else
     {
         if (attr->args.getCount() == 0)

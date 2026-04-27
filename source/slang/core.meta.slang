@@ -402,7 +402,7 @@ attribute_syntax [__NonCopyableType] : NonCopyableTypeAttribute;
 __attributeTarget(InterfaceDecl)
 attribute_syntax [__FunctionInterface] : FunctionInterfaceAttribute;
 
-__attributeTarget(AggTypeDecl)
+__attributeTarget(DeclBase)
 attribute_syntax [Tunable] : TunableAttribute;
 
 __attributeTarget(FunctionDeclBase)
