@@ -517,6 +517,7 @@ return {
 	["Decoration.ignoreSideEffectsDecoration"] = 529,
 	["Decoration.CheckpointHintDecoration.PreferCheckpointDecoration"] = 530,
 	["Decoration.CheckpointHintDecoration.PreferRecomputeDecoration"] = 531,
+	["Decoration.CheckpointHintDecoration.CheckpointPreferenceDecoration"] = 855,
 	["Decoration.NonDynamicUniformReturnDecoration"] = 533,
 	["Decoration.COMWitnessDecoration"] = 534,
 	["Decoration.DifferentiableTypeDictionaryDecoration"] = 535,

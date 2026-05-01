@@ -2354,6 +2354,12 @@ local insts = {
 							-- Hint that the result from a call to the decorated function should be recomputed in backward prop function.
 						},
 					},
+					{
+						CheckpointPreferenceDecoration = {
+							-- Hint that the result from a call to the decorated function should be stored or recomputed based on a bool operand.
+							operands = { { "preferCheckpoint" } },
+						},
+					},
 				},
 			},
 			{

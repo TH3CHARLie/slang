@@ -978,9 +978,30 @@ void checkAutodiffPatterns(IRModule* module, TargetProgram* target, DiagnosticSi
     {
         if (auto func = as<IRFunc>(inst))
         {
-            if (func->sourceLoc.isValid() && // Don't diagnose for synthesized functions
-                func->findDecoration<IRPreferRecomputeDecoration>())
+            if (func->sourceLoc.isValid()) // Don't diagnose for synthesized functions
             {
+                bool shouldDiagnosePreferRecompute = false;
+                bool shouldWarnForSideEffects = true;
+
+                if (auto preferRecomputeDecor = func->findDecoration<IRPreferRecomputeDecoration>())
+                {
+                    shouldDiagnosePreferRecompute = true;
+                    auto sideEffectBehavior =
+                        as<IRIntLit>(preferRecomputeDecor->getOperand(0))->getValue();
+                    shouldWarnForSideEffects = sideEffectBehavior != SideEffectBehavior::Allow;
+                }
+                else if (
+                    auto preferenceDecor = func->findDecoration<IRCheckpointPreferenceDecoration>())
+                {
+                    if (auto preferCheckpoint = as<IRBoolLit>(preferenceDecor->getOperand(0)))
+                    {
+                        shouldDiagnosePreferRecompute = !preferCheckpoint->getValue();
+                    }
+                }
+
+                if (!shouldDiagnosePreferRecompute)
+                    continue;
+
                 // If we don't have any side-effect behavior, we should warn (note: read-none is
                 // a stronger guarantee than no-side-effect)
                 //
@@ -988,11 +1009,7 @@ void checkAutodiffPatterns(IRModule* module, TargetProgram* target, DiagnosticSi
                     func->findDecoration<IRReadNoneDecoration>())
                     continue;
 
-                auto preferRecomputeDecor = func->findDecoration<IRPreferRecomputeDecoration>();
-                auto sideEffectBehavior =
-                    as<IRIntLit>(preferRecomputeDecor->getOperand(0))->getValue();
-
-                if (sideEffectBehavior == SideEffectBehavior::Allow)
+                if (!shouldWarnForSideEffects)
                     continue;
 
                 // Find function name. (don't diagnose on nameless functions)

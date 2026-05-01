@@ -1743,6 +1743,13 @@ class PreferCheckpointAttribute : public Attribute
 };
 
 FIDDLE()
+class CheckpointPreferenceAttribute : public Attribute
+{
+    FIDDLE(...)
+    FIDDLE() IntVal* preferCheckpoint = nullptr;
+};
+
+FIDDLE()
 class DerivativeMemberAttribute : public Attribute
 {
     FIDDLE(...)

@@ -2586,6 +2586,11 @@ CheckpointPreference getCheckpointPreference(IRInst* callee)
         case kIROp_PreferRecomputeDecoration:
         case kIROp_TargetIntrinsicDecoration:
             return CheckpointPreference::PreferRecompute;
+        case kIROp_CheckpointPreferenceDecoration:
+            if (auto boolLit = as<IRBoolLit>(decor->getOperand(0)))
+                return boolLit->getValue() ? CheckpointPreference::PreferCheckpoint
+                                           : CheckpointPreference::PreferRecompute;
+            break;
         }
     }
     return CheckpointPreference::None;

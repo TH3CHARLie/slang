@@ -1058,6 +1058,28 @@ Modifier* SemanticsVisitor::validateAttribute(
         preferRecomputeAttr->sideEffectBehavior =
             (PreferRecomputeAttribute::SideEffectBehavior)val->getValue();
     }
+    else if (auto checkpointPreferenceAttr = as<CheckpointPreferenceAttribute>(attr))
+    {
+        SLANG_UNUSED(checkpointPreferenceAttr);
+        SLANG_ASSERT(attr->args.getCount() == 1);
+        SLANG_ASSERT(as<Decl>(attrTarget));
+
+        auto arg = CheckExpr(attr->args[0]);
+        arg = coerce(CoercionSite::Argument, m_astBuilder->getBoolType(), arg, getSink());
+        if (IsErrorExpr(arg))
+            return nullptr;
+
+        attr->args[0] = arg;
+
+        checkpointPreferenceAttr->preferCheckpoint =
+            tryFoldIntegerConstantExpression(arg, ConstantFoldingKind::LinkTime, nullptr);
+        if (!checkpointPreferenceAttr->preferCheckpoint)
+        {
+            getSink()->diagnose(
+                Diagnostics::ExpectedIntegerConstantNotConstant{.location = arg->loc});
+            return nullptr;
+        }
+    }
     else if (auto comInterfaceAttr = as<ComInterfaceAttribute>(attr))
     {
         SLANG_ASSERT(attr->args.getCount() == 1);

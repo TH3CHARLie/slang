@@ -260,10 +260,11 @@ struct BackwardDiffTranslationContext
 
         // Copy over checkpoint preference hints.
         {
-            auto diffPrimalFunc = getResolvedInstForDecorations(applyFunc, true);
+            auto diffPrimalFunc =
+                cast<IRGlobalValueWithCode>(getResolvedInstForDecorations(applyFunc, true));
             auto checkpointHint = targetFunc->findDecoration<IRCheckpointHintDecoration>();
             if (checkpointHint)
-                builder->addDecoration(diffPrimalFunc, checkpointHint->getOp());
+                cloneCheckpointHint(builder, checkpointHint, diffPrimalFunc);
         }
 
         // ------------------------------------------------------------

@@ -13528,6 +13528,17 @@ struct DeclLoweringVisitor : DeclVisitor<DeclLoweringVisitor, LoweredValInfo>
                         getBuilder()->getIntType(),
                         attr->sideEffectBehavior));
             }
+            else if (auto checkpointPreferenceAttr = as<CheckpointPreferenceAttribute>(modifier))
+            {
+                subContext->irBuilder->setInsertBefore(irFunc);
+                auto preferCheckpointVal = getSimpleVal(
+                    subContext,
+                    lowerVal(subContext, checkpointPreferenceAttr->preferCheckpoint));
+                getBuilder()->addDecoration(
+                    irFunc,
+                    kIROp_CheckpointPreferenceDecoration,
+                    preferCheckpointVal);
+            }
             else if (auto extensionMod = as<RequiredGLSLExtensionModifier>(modifier))
                 getBuilder()->addRequireGLSLExtensionDecoration(
                     irFunc,

@@ -4760,6 +4760,11 @@ attribute_syntax[PreferRecompute(behavior: SideEffectBehavior = SideEffectBehavi
 __attributeTarget(FunctionDeclBase)
 attribute_syntax [PreferCheckpoint] : PreferCheckpointAttribute;
 
+/// Mark a differentiable function to prefer checkpointing or recomputation from a link-time bool expression.
+/// `true` means `[PreferCheckpoint]`; `false` means `[PreferRecompute]`.
+__attributeTarget(FunctionDeclBase)
+attribute_syntax [CheckpointPreference(preferCheckpoint: bool)] : CheckpointPreferenceAttribute;
+
 // @hidden:
 __attributeTarget(DeclBase)
 attribute_syntax [KnownBuiltin(name : int)] : KnownBuiltinAttribute;
